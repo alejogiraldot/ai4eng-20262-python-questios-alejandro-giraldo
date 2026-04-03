@@ -1,0 +1,38 @@
+El Problema:
+Trabajas en el área de análisis de datos de una empresa farmacéutica. Recibes un DataFrame en formato "ancho" (wide) donde cada fila representa un paciente y las columnas representan mediciones de un biomarcador en diferentes momentos del tratamiento (semana_0, semana_2, semana_4, semana_8). Este formato es difícil de analizar con herramientas de agrupación. Necesitas transformarlo a formato "largo" (long/tidy) para poder calcular estadísticas por semana.
+
+Tu Misión:
+Escribe una función llamada transformar_a_largo(df, id_col, columnas_semana) que realice lo siguiente:
+
+1. Reciba un pd.DataFrame df con una columna identificadora del paciente (id_col) y varias columnas de mediciones (columnas_semana, por ejemplo ['semana_0', 'semana_2', 'semana_4', 'semana_8']).
+2. Use pd.melt() para transformar el DataFrame de formato ancho a formato largo, de modo que cada fila represente una sola medición de un paciente en un momento dado.
+3. Renombre las columnas resultantes del melt a 'semana' (la columna variable) y 'valor' (la columna de medición).
+4. Extraiga el número de semana de la columna 'semana' (por ejemplo, de 'semana_4' extraer el entero 4) y almacénelo como columna de tipo entero, reemplazando la columna 'semana' original.
+5. Calcule con pandas el promedio (mean) y la desviación estándar (std) de 'valor' agrupado por 'semana'.
+6. Devuelva un DataFrame de resumen con columnas ['semana', 'promedio', 'desviacion_std'], ordenado por 'semana' ascendente, con el índice reiniciado.
+
+Restricciones:
+- Librerías permitidas: pandas, numpy.
+- Evitar loops explícitos con for.
+- El número de semana debe ser de tipo int.
+
+Retorno:
+Un pd.DataFrame con columnas ['semana', 'promedio', 'desviacion_std'], ordenado por semana ascendente.
+
+Ejemplo:
+
+    import pandas as pd
+
+    df = pd.DataFrame({
+        'paciente_id': [1, 2, 3],
+        'semana_0':    [5.1, 4.8, 6.2],
+        'semana_4':    [4.5, 4.0, 5.8],
+        'semana_8':    [3.9, 3.5, 5.0],
+    })
+
+    resultado = transformar_a_largo(df, 'paciente_id', ['semana_0', 'semana_4', 'semana_8'])
+    print(resultado)
+    #    semana  promedio  desviacion_std
+    # 0       0   5.3667          0.7234
+    # 1       4   4.7667          0.4163
+    # 2       8   4.1333          0.7638
