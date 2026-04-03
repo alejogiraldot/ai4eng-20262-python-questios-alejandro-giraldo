@@ -1,0 +1,57 @@
+El Problema:
+Trabajas en una empresa de telecomunicaciones que predice el consumo de datos móviles (variable continua) a partir de características de sus usuarios. El dataset tiene columnas numéricas (edad, antigüedad_meses, num_dispositivos) y columnas categóricas (plan, ciudad). Necesitas construir un pipeline robusto que maneje ambos tipos de datos automáticamente antes de entrenar un modelo de regresión.
+
+Tu Misión:
+Escribe una función llamada pipeline_mixto_regresion(df, target_col, cat_cols, num_cols) que realice lo siguiente:
+
+1. Reciba:
+   - df: pd.DataFrame con datos de usuarios.
+   - target_col: str con el nombre de la columna objetivo (variable continua).
+   - cat_cols: lista de nombres de columnas categóricas.
+   - num_cols: lista de nombres de columnas numéricas.
+2. Separe X e y.
+3. Divida en train/test (80%/20%, random_state=42).
+4. Construya un ColumnTransformer que:
+   - Para las columnas numéricas (num_cols): aplique SimpleImputer(strategy='median') seguido de StandardScaler.
+   - Para las columnas categóricas (cat_cols): aplique SimpleImputer(strategy='most_frequent') seguido de OneHotEncoder(handle_unknown='ignore', sparse_output=False).
+5. Construya un Pipeline de sklearn que encadene el ColumnTransformer con un modelo LinearRegression.
+6. Entrene el pipeline con los datos de entrenamiento.
+7. Calcule el R² del modelo sobre el conjunto de prueba.
+8. Devuelva un diccionario con:
+   - 'pipeline': el objeto Pipeline entrenado.
+   - 'r2_test': float con el R² en el conjunto de prueba.
+   - 'n_features_out': entero con el número de columnas de salida del ColumnTransformer (después de la transformación).
+
+Restricciones:
+- Librerías permitidas: pandas, numpy, sklearn.
+- El ColumnTransformer debe usar remainder='drop'.
+- El parámetro sparse_output=False en OneHotEncoder garantiza una matriz densa.
+
+Retorno:
+Un diccionario con las claves 'pipeline', 'r2_test' y 'n_features_out'.
+
+Ejemplo:
+
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(0)
+    n = 200
+    df = pd.DataFrame({
+        'edad':           np.random.randint(18, 65, n),
+        'antiguedad_meses': np.random.randint(1, 60, n),
+        'num_dispositivos': np.random.randint(1, 5, n),
+        'plan':           np.random.choice(['basico', 'medio', 'premium'], n),
+        'ciudad':         np.random.choice(['Medellin', 'Bogota', 'Cali'], n),
+        'consumo_gb':     np.random.uniform(1, 50, n).round(2)
+    })
+
+    resultado = pipeline_mixto_regresion(
+        df,
+        target_col='consumo_gb',
+        cat_cols=['plan', 'ciudad'],
+        num_cols=['edad', 'antiguedad_meses', 'num_dispositivos']
+    )
+    print(type(resultado['pipeline']))     # sklearn Pipeline
+    print(isinstance(resultado['r2_test'], float))  # True
+    print(resultado['n_features_out'])     # 3 + 3 + 3 = 9 (3 num + 3 plan OHE + 3 ciudad OHE)
