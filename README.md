@@ -1,7 +1,7 @@
 # AI4ENG 2026-2 — Python Questions
 
-**Nombre:** Tu Nombre Completo  
-**Correo:** tunombre@udea.edu.co  
+**Nombre:** Tu Alejandro Giraldo Torres  
+**Correo:** alejandro.giraldot@udea.edu.co  
 **Curso:** Inteligencia Artificial para las Ciencias y las Ingenierías
 
 ## Descripción
@@ -19,5 +19,3 @@ myquestions/
 ├── question-0004.txt
 └── question-0004-usecase-generator.py
 
-myanswers/
-└── (vacío por ahora — fase 2)
