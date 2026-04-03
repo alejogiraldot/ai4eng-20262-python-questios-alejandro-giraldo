@@ -1,0 +1,51 @@
+El Problema:
+En una empresa de calidad industrial, los productos se clasifican automáticamente en tres categorías de defecto: 'sin_defecto', 'defecto_leve' y 'defecto_grave'. Tu tarea es entrenar un clasificador multiclase, evaluar su desempeño por clase y generar un reporte con las métricas de precisión y recall para cada categoría.
+
+Tu Misión:
+Escribe una función llamada evaluar_clasificador_multiclase(X, y_raw, test_size=0.25, random_state=42) que realice lo siguiente:
+
+1. Reciba:
+   - X: numpy array o DataFrame con características numéricas.
+   - y_raw: array o lista con etiquetas de texto (por ejemplo: ['sin_defecto', 'defecto_leve', 'defecto_grave']).
+   - test_size: fracción para el conjunto de prueba.
+   - random_state: semilla para reproducibilidad.
+2. Codifique y_raw a enteros usando LabelEncoder de sklearn.preprocessing. Guarde el LabelEncoder para poder recuperar los nombres de clases.
+3. Divida X e y (codificado) en train/test usando train_test_split con los parámetros dados.
+4. Escale las features con StandardScaler (ajustar solo sobre train).
+5. Entrene un RandomForestClassifier(n_estimators=100, random_state=random_state).
+6. Obtenga las predicciones sobre el test set.
+7. Para cada clase (usando los nombres originales de las etiquetas, recuperados del LabelEncoder), calcule:
+   - precision (usando precision_score con average=None)
+   - recall (usando recall_score con average=None)
+8. Devuelva un diccionario con:
+   - 'accuracy': float con el accuracy global en test.
+   - 'por_clase': dict de dicts, con la forma:
+     {'sin_defecto': {'precision': float, 'recall': float},
+      'defecto_leve': {'precision': float, 'recall': float},
+      'defecto_grave': {'precision': float, 'recall': float}}
+     (los nombres de clave deben ser los nombres originales de clase, no los enteros)
+   - 'label_encoder': el objeto LabelEncoder entrenado.
+
+Restricciones:
+- Librerías permitidas: numpy, sklearn.
+- No usar pandas en la función principal (X puede ser array).
+
+Retorno:
+Un diccionario con las claves 'accuracy', 'por_clase' y 'label_encoder'.
+
+Ejemplo:
+
+    import numpy as np
+    from sklearn.datasets import make_classification
+
+    X, y_int = make_classification(n_samples=300, n_features=10,
+                                   n_classes=3, n_informative=5,
+                                   random_state=42)
+    clases = ['sin_defecto', 'defecto_leve', 'defecto_grave']
+    y_raw = [clases[i] for i in y_int]
+
+    resultado = evaluar_clasificador_multiclase(X, y_raw, test_size=0.25, random_state=42)
+    print(resultado['accuracy'])          # float entre 0 y 1
+    print(resultado['por_clase'].keys())  # dict_keys(['defecto_grave', 'defecto_leve', 'sin_defecto'])
+    print(resultado['por_clase']['sin_defecto'])
+    # {'precision': 0.XXX, 'recall': 0.XXX}
