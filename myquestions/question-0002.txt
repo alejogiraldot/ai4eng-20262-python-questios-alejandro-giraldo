@@ -1,0 +1,43 @@
+El Problema:
+Trabajas en un equipo de mantenimiento predictivo de una planta industrial. Tienes un DataFrame con lecturas diarias de vibración de motores (una fila por día por motor). Antes de entrenar un modelo, necesitas construir características temporales: el valor del día anterior (lag 1), el valor de hace 7 días (lag 7) y la tendencia de los últimos 3 días (diferencia entre el último valor y el de hace 3 días).
+
+Tu Misión:
+Escribe una función llamada construir_features_vibracion(df, motor_col, fecha_col, vibracion_col) que realice lo siguiente:
+
+1. Reciba un pd.DataFrame df con columnas:
+   - motor_col: identificador del motor (string o int)
+   - fecha_col: fecha de la lectura (string o datetime)
+   - vibracion_col: nivel de vibración (float)
+2. Convierta fecha_col a datetime si es necesario.
+3. Ordene el DataFrame por motor_col y fecha_col ascendente.
+4. Para cada motor por separado (usando groupby + transform o shift), cree las siguientes columnas nuevas:
+   - 'lag_1': valor de vibracion_col del día anterior (shift de 1) para el mismo motor.
+   - 'lag_7': valor de vibracion_col de hace 7 días (shift de 7) para el mismo motor.
+   - 'tendencia_3d': diferencia entre vibracion_col actual y vibracion_col de hace 3 días (shift de 3) para el mismo motor.
+5. Elimine las filas que contengan NaN en cualquiera de las nuevas columnas.
+6. Reinicie el índice (drop=True).
+7. Devuelva el DataFrame resultante con todas las columnas originales más las tres nuevas columnas.
+
+Restricciones:
+- Librerías permitidas: pandas, numpy.
+- No usar loops explícitos para iterar filas; usar groupby con shift.
+
+Retorno:
+Un pd.DataFrame con las columnas originales más 'lag_1', 'lag_7', 'tendencia_3d', sin filas con NaN en esas columnas, índice reiniciado.
+
+Ejemplo:
+
+    import pandas as pd
+    import numpy as np
+
+    np.random.seed(0)
+    fechas = pd.date_range('2024-01-01', periods=15)
+    df = pd.DataFrame({
+        'motor': ['M1'] * 15,
+        'fecha': fechas,
+        'vibracion': np.random.uniform(1.0, 5.0, 15).round(2)
+    })
+    resultado = construir_features_vibracion(df, 'motor', 'fecha', 'vibracion')
+    print(resultado.shape)   # (8, 6) — 15 filas menos las 7 eliminadas por NaN
+    print(resultado.columns.tolist())
+    # ['motor', 'fecha', 'vibracion', 'lag_1', 'lag_7', 'tendencia_3d']
